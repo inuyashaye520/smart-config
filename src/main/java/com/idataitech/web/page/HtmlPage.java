@@ -7,10 +7,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class HtmlPage {
 
     /**
-     * angular 模板页面
+     * 引导页面
      */
-    @RequestMapping(value = "/tmpl/**/*.html")
-    public void tmpl() {
+    @RequestMapping(value = {"/", "/admin.html"})
+    public String index() {
+        return "/admin";
     }
 
 }

@@ -17,13 +17,13 @@ gulp.task('pug', function () {
     var pugs = gulp.src(assets + '/pug/**/*.pug')
         .pipe(pug({basedir: pwd, pretty: true}))
         .pipe(version({replaces: [/#{VERSION}#/g]}))
-        //.pipe(rename({extname: '.ftl'}))
+        .pipe(rename({extname: '.ftl'}))
         .pipe(gulp.dest('target/classes/templates'));
 
     var tmpls = gulp.src([assets + '/module/**/*.pug'])
         .pipe(pug({basedir: pwd, pretty: true}))
         .pipe(version({replaces: [/#{VERSION}#/g]}))
-        //.pipe(rename({extname: '.ftl'}))
+        .pipe(rename({extname: '.ftl'}))
         .pipe(gulp.dest('target/classes/templates/tmpl'));
 
     return merge(pugs, tmpls);
@@ -31,28 +31,33 @@ gulp.task('pug', function () {
 
 gulp.task('js', function () {
     var dest = assetsDest + '/js';
-    var indexJs = gulp.src([assets + '/module/common/**/*.module.js',
-        assets + '/module/**/*.module.js',
+
+    var userJs = gulp.src([assets + '/module/common/**/*.module.js',
+        assets + '/module/user/**/*.module.js',
         assets + '/module/common/**/*.js',
-        assets + '/module/**/*.js'
+        assets + '/module/user/**/*.js'
     ])
-        .pipe(concat('index.js'))
+        .pipe(concat('user.js'))
         .pipe(gulp.dest(dest))
-        .pipe(rename('index.min.js'))
+        .pipe(rename('user.min.js'))
         .pipe(uglify())
         .pipe(gulp.dest(dest));
 
-    return merge(indexJs);
+    return merge(userJs);
 });
 
 gulp.task('css', function () {
     var expanded = gulp.src(assets + '/scss/**/*.scss')
-            .pipe(sass({outputStyle: 'expanded'}).on('error', sass.logError))
-            .pipe(gulp.dest(assetsDest + '/css'));
+        .pipe(sass({outputStyle: 'expanded'}).on('error', sass.logError))
+        .pipe(gulp.dest(assetsDest + '/css'))
+        .pipe(concat('app.css'))
+        .pipe(gulp.dest(assetsDest + '/css'));
 
     var compressed = gulp.src(assets + '/scss/**/*.scss')
         .pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
         .pipe(rename({extname: '.min.css'}))
+        .pipe(gulp.dest(assetsDest + '/css'))
+        .pipe(concat('app.min.css'))
         .pipe(gulp.dest(assetsDest + '/css'));
     return merge(expanded, compressed);
 });
@@ -71,13 +76,15 @@ gulp.task('copy', function () {
 });
 
 gulp.task('watch', function () {
-    gulp.watch([assets + '/*pug/**/*.pug'], ['pug']);
+    gulp.watch([assets + '/*pug/**/*.pug', assets + '/*module/**/*.pug'], ['pug']);
     gulp.watch([assets + '/scss/**/*.scss'], ['css']);
+    gulp.watch([assets + '/module/**/*.js'], ['js']);
 });
 
 gulp.task('connect', function () {
     connect.server({root: 'target/classes/static', port: 8888, livereload: false});
 });
 
-gulp.task('build', ['pug', 'css', 'copy']);
+
+gulp.task('build', ['pug', 'css', 'js', 'copy']);
 gulp.task('default', ['build', 'watch']);

@@ -1,0 +1,1 @@
+<#assign Assets=ContextPath />
