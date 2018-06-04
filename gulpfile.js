@@ -32,18 +32,18 @@ gulp.task('pug', function () {
 gulp.task('js', function () {
     var dest = assetsDest + '/js';
 
-    var userJs = gulp.src([assets + '/module/common/**/*.module.js',
-        assets + '/module/user/**/*.module.js',
+    var adminJs = gulp.src([assets + '/module/common/**/*.module.js',
+        assets + '/module/admin/**/*.module.js',
         assets + '/module/common/**/*.js',
-        assets + '/module/user/**/*.js'
+        assets + '/module/admin/**/*.js'
     ])
-        .pipe(concat('user.js'))
+        .pipe(concat('admin.js'))
         .pipe(gulp.dest(dest))
-        .pipe(rename('user.min.js'))
+        .pipe(rename('admin.min.js'))
         .pipe(uglify())
         .pipe(gulp.dest(dest));
 
-    return merge(userJs);
+    return merge(adminJs);
 });
 
 gulp.task('css', function () {
@@ -84,7 +84,6 @@ gulp.task('watch', function () {
 gulp.task('connect', function () {
     connect.server({root: 'target/classes/static', port: 8888, livereload: false});
 });
-
 
 gulp.task('build', ['pug', 'css', 'js', 'copy']);
 gulp.task('default', ['build', 'watch']);

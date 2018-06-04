@@ -26,7 +26,7 @@ public class FreemarkerConfig {
     public void init(ApplicationReadyEvent event) {
         try {
             String[] activeProfiles = env.getActiveProfiles();
-            configuration.setSharedVariable("Profile", activeProfiles == null || activeProfiles.length == 0 ? "dev" : activeProfiles[0]);
+            configuration.setSharedVariable("Profile", (activeProfiles == null || activeProfiles.length == 0)? "dev": activeProfiles[0]);
             configuration.setSharedVariable("ContextPath", servletContext.getContextPath());
         } catch (TemplateModelException e) {
             e.printStackTrace();

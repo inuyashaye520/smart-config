@@ -2,7 +2,7 @@
     'use strict';
 
     var Factory = function ($resource) {
-        return $resource(Context + '/api/user/application/:id', {}, {
+        return $resource(Context + '/api/admin/application/:id', {}, {
 
 
         });

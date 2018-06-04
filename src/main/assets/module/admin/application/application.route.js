@@ -3,7 +3,7 @@
         Router.state('application-list', {
             url: '/application/list.html',
             controller: 'ApplicationListCtrl',
-            templateUrl: '/user/application/list.html'
+            templateUrl: '/admin/application/list.html'
         });
 
     };

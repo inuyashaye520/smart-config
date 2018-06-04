@@ -9,7 +9,7 @@ public class HtmlPage {
     /**
      * 引导页面
      */
-    @RequestMapping(value = {"/", "/admin.html"})
+    @RequestMapping(value = {"/", "/admin", "/admin.html"})
     public String index() {
         return "/admin";
     }
