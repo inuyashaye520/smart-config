@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.idataitech.web.dao.ConfigDao">
+
+    <select id="select" parameterType="map" resultType="map">
+        SELECT `key`
+            , `value`
+        FROM `config`
+        <where>
+            <if test="application!=null and application!=''">
+                `application` = #{application}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectUpdated" parameterType="map" resultType="long">
+        SELECT `value`
+        FROM `config`
+        WHERE `namespace` = #{application}
+        AND `key` = 'updated'
+    </select>
+
+    <update id="update" parameterType="map">
+        INSERT INTO `config` (
+            `namespace`
+            , `key`
+            , `value`
+        ) VALUES
+        <foreach collection="config" index="key" item="value" separator=",">
+        (
+            #{application}
+            , #{key}
+            , #{value}
+        )
+        </foreach>
+        ON DUPLICATE KEY UPDATE `value` = VALUES(`value`)
+    </update>
+
+    <update id="updateUpdated" parameterType="map">
+        INSERT INTO `config` (
+            `namespace`
+            , `key`
+            , `value`
+        ) VALUES (
+            #{application}
+            , 'updated'
+            , #{updated}
+        ) ON DUPLICATE KEY UPDATE `value` = VALUES(`value`)
+    </update>
+
+</mapper>
